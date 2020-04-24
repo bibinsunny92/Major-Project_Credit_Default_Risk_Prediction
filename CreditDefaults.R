@@ -126,15 +126,19 @@ CreditNew$CODE_GENDER                   = ifelse(is.na(CreditNew$CODE_GENDER),me
 CreditNew$CODE_GENDER                   = as.factor(CreditNew$CODE_GENDER)
 
 
-##################################################################################################################################3
+##################################################################################################################################
 
 #-------------------------------------          Convert Categorical into factors  ------------------------------------------------#
 
-#convert <- c(3:6, 12:16,28,38,43:44,46:47)
-#CreditNew[,convert] <- data.frame(apply(CreditNew[convert], 2, as.factor))
+convert <- c(3:6, 12:16,28,38,43:44,46:47)
+CreditNew[,convert] <- data.frame(apply(CreditNew[convert], 2, as.factor))
 
 str(CreditNew)
 
+#-------------------------------------       Part a. Feauture Selection  ------------------------------------------------#
+
+## We tried to use various models to select only the best variables that should be used in our model and removing unwanted columns that may 
+#reduce the accuracy#
 
 # 1. Random Forest Algorithm
 
@@ -216,33 +220,22 @@ results
 
 varImpPlot(results)
 
-#The top 5 variables (out of 47):
-#  EXT_SOURCE_2, EXT_SOURCE_1, OCCUPATION_TYPE, ORGANIZATION_TYPE, AMT_INCOME_TOTAL
-
-
 print(results)
 predictors <- predictors(results)
 
-colnames(training3)[unique(which(is.na(training3[,-2]), arr.ind = TRUE)[,2])]
-
-
 #The top 5 variables (out of 47):
 #  EXT_SOURCE_2, EXT_SOURCE_1, OCCUPATION_TYPE, ORGANIZATION_TYPE, AMT_INCOME_TOTAL
-
-
-print(results)
-predictors <- predictors(results)
 
 
 
 ###############################     MAKING FINAL DECISION        ###########################################
-# From the 4 models we have decided to take those variables that are common to atleast 3 of it.
+# From the 4 models we have decided to take those variables that are common to atleast 3 of the above models.
 
 # EXT_SOURCE_2, EXT_SOURCE_1, EXT_SOURCE_1, DAYS_EMPLOYED, DAYS_ID_PUBLISH, DAYS_LAST_PHONE_CHANGE, OCCUPATION_TYPE, 
 # REGION_RATING_CLIENT_W_CITY, NAME_INCOME_TYPE, AMT_INCOME_TOTAL,DAYS_BIRTH,AMT_CREDIT,AMT_GOODS_PRICE,TARGET
 
 
-###################################### Plot corrplot analysis #######################
+###################################### Plot corrplot analysi (to find corelations among variables #######################
 
 install.packages("corrplot")
 library(corrplot)
@@ -255,6 +248,7 @@ coorelation = corrplot(cor(CreditData),type = "upper",method="number",t1.cex=0.0
 #############                                                                               ################
 ############################################################################################################
 
+# Last step in identifying the best model to be used. We used 4 different models and tried to compare their accuracies.
 
 ############## 1. logistics Regression ###############################
 
